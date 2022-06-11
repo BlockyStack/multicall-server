@@ -11,9 +11,12 @@ const provider = new ethers.providers.JsonRpcProvider("https://testnet.emerald.o
 
 app.get("/", async function (req, res) {
   try {
-    res.send(await getMulticall());
+    const response = await getMulticall()
+    res.send({response});
   } catch {
-    res.status(500).send([]);
+    res.status(500).send({
+     response: [] 
+    });
   }
 });
 
@@ -22,15 +25,17 @@ app.get("/owner", async function (req, res) {
   try {
     const address = req.query.address.toLowerCase();
     const multicall = await getMulticall();
-    const owner = [];
+    const response = [];
     for (let i = 0; i < multicall.length; i++) {
       if (multicall[i].owner === address) {
-        owner.push(multicall[i].id);
+        response.push(multicall[i].id);
       }
     }
-    res.send(owner);
+    res.send({response});
   } catch (error) {
-    res.status(500).send([]);
+    res.status(500).send({
+     response: [] 
+    });
   }
 });
 
