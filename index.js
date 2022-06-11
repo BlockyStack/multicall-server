@@ -1,6 +1,8 @@
 const express = require("express");
 const app = express();
+var cors = require("cors");
 const { ethers } = require("ethers");
+app.use(cors());
 
 // prettier-ignore
 const multicallAbi = [ { constant: false, inputs: [ { components: [ { name: "target", type: "address" }, { name: "callData", type: "bytes" }, ], name: "calls", type: "tuple[]", }, ], name: "aggregate", outputs: [ { name: "blockNumber", type: "uint256" }, { name: "returnData", type: "bytes[]" }, ], payable: false, stateMutability: "nonpayable", type: "function", }, ];
@@ -11,11 +13,11 @@ const provider = new ethers.providers.JsonRpcProvider("https://testnet.emerald.o
 
 app.get("/", async function (req, res) {
   try {
-    const response = await getMulticall()
-    res.send({response});
+    const response = await getMulticall();
+    res.send({ response });
   } catch {
     res.status(500).send({
-     response: [] 
+      response: [],
     });
   }
 });
@@ -31,10 +33,10 @@ app.get("/owner", async function (req, res) {
         response.push(multicall[i].hex);
       }
     }
-    res.send({response});
+    res.send({ response });
   } catch (error) {
     res.status(500).send({
-     response: [] 
+      response: [],
     });
   }
 });
