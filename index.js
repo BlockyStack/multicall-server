@@ -28,7 +28,7 @@ app.get("/owner", async function (req, res) {
     const response = [];
     for (let i = 0; i < multicall.length; i++) {
       if (multicall[i].owner === address) {
-        response.push(multicall[i].id);
+        response.push(multicall[i].hex);
       }
     }
     res.send({response});
@@ -51,6 +51,7 @@ async function getMulticall() {
   return multicall.returnData.map((val, index) => {
     return {
       id: colors[index],
+      hex: "#" + colors[index].toString(16).padStart(6, "0"),
       owner: "0x" + val.slice(26).toLowerCase(),
     };
   });
